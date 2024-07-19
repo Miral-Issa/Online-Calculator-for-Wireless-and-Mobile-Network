@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Transmission Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <i class="fa-solid fa-phone-volume icon"></i>
+        <h1>Power Transmission Calculator</h1>
+    </header>
+
+    <form id="parametersForm">
+        <ul class="textBoxHolder">
+            <li><label for="PL">Path loss (dB):</label><input type="number" id="PL" class="textBox" required></li>
+            <li><label for="freq">Frequency:</label><input type="number" id="freq" class="textBox" required></li>
+            <li><label for="TantennaG">Transmitter antenna gain (dB):</label><input type="number" id="TantennaG" class="textBox" required></li>
+            <li><label for="RantennaG">Receiver antenna gain (dB):</label><input type="number" id="RantennaG" class="textBox" required></li>
+            <li><label for="DataRate">Data Rate (bps):</label><input type="number" id="DataRate" class="textBox" required></li>
+            <li><label for="antennaFeedL">Antenna feed line loss (dB):</label><input type="number" id="antennaFeedL" class="textBox" required></li>
+            <li><label for="otherLoss">Other losses (dB):</label><input type="number" id="otherLoss" class="textBox" required></li>
+            <li><label for="fadeMargin">Fade margin (dB):</label><input type="number" id="fadeMargin" class="textBox" required></li>
+            <li><label for="Ramplifier">Receiver amplifier gain (dB):</label><input type="number" id="Ramplifier" class="textBox" required></li>
+            <li><label for="Tamplifier">Transmitter amplifier gain (dB):</label><input type="number" id="Tamplifier" class="textBox" required></li>
+            <li><label for="noiseF">Noise figure (dB):</label><input type="number" id="noiseF" class="textBox" required></li>
+            <li><label for="noiseT">Noise temperature (dB):</label><input type="number" id="noiseT" class="textBox" required></li>
+            <li><label for="linkMargin">Link margin (dB):</label><input type="number" id="linkMargin" class="textBox" required></li>
+            <li><label for="errorMargin">Eb/No (dB):</label><input type="number" id="errorMargin" class="textBox" required></li>
+        </ul>
+        <div class="buttonHolder">
+            <button type="button" id="button1" onclick="solve()">Calculate</button>
+            <button type="button" id="homeButton" onclick="goHome()">Home</button>
+        </div>
+    </form>
+
+    <div id="answers">
+        <h2>Calculation Results</h2>
+        <p>Power received: <span id="Power-recieved"></span></p>
+        <p>Power transmitted: <span id="power-transmitted"></span></p>
+    </div>
+
+    <script>
+        function solve() {
+            //calculate power received
+            let M = parseFloat(document.getElementById("linkMargin").value);
+            let K = -228.6;
+            let T = parseFloat(document.getElementById("noiseT").value);
+            let Nf = parseFloat(document.getElementById("noiseF").value);
+            let R = parseFloat(document.getElementById("DataRate").value);
+            R = 10 * Math.log10(R);
+            let Eb = parseFloat(document.getElementById("errorMargin").value);
+
+            let Pr = M + K + T + Nf + R + Eb;
+            document.getElementById("Power-recieved").textContent = Pr + " dB";
+
+            //calculate power transmitted
+            let Lp = parseFloat(document.getElementById("PL").value);
+            let Lfeeder = parseFloat(document.getElementById("antennaFeedL").value);
+            let Lother = parseFloat(document.getElementById("otherLoss").value);
+            let Lfmargin = parseFloat(document.getElementById("fadeMargin").value);
+        
+            let Gt = parseFloat(document.getElementById("TantennaG").value);
+            let Gr= parseFloat(document.getElementById("RantennaG").value);
+
+            let At= parseFloat(document.getElementById("Tamplifier").value);
+            let Ar= parseFloat(document.getElementById("Ramplifier").value);
+
+            let pt = Lp + Lfeeder + Lother + Lfmargin - Gt - Gr - At - Ar;
+            document.getElementById("power-transmitted").textContent = pt + " dB";
+        }
+        
+        function goHome() {
+            window.location.href = "home_screen.html"; 
+        }
+    </script>
+</body>
+</html>

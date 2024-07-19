@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireless Systems Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+</head>
+<body>
+    <header>
+        <!-- <img src="C:\Users\Administrator\Downloads\ADC.png" alt="Icon Image" id="home_icon" class="icon"> -->
+        <i class="fa-solid fa-barcode icon" id="home_icon" class="icon"></i>
+        <h1>Wireless Systems Calculator</h1>
+    </header>
+
+    <form id="parametersForm">
+        <ul class="textBoxHolder">
+            <li><label for="BW">Bandwidth of Sampler (BW):</label><input type="number" id="BW" class="textBox" required></li>
+            <li><label for="quantizerBits">Number of Bits per Quantizer:</label><input type="number" id="quantizerBits" class="textBox" required></li>
+            <li><label for="Rs">Compression Rate of Source Encoder (Rs):</label><input type="number" id="Rs" class="textBox" required></li>
+            <li><label for="Rc">Channel Encoder Rate (Rc):</label><input type="number" id="Rc" class="textBox" required></li>
+            <li><label for="interleaverBits">Number of Interleaver Bits:</label><input type="number" id="interleaverBits" class="textBox" required></li>
+        </ul>
+        <div class="buttonHolder">
+            <button type="button" id="button1" onclick="calculateOutputs()">Calculate</button>
+            <button type="button" id="homeButton" onclick="goHome()">Home</button>
+        </div>
+    </form>
+
+    <div id="answers">
+        <h2>Calculation Results</h2>
+        <p>Sampling Frequency: <span id="samplingFrequency"></span></p>
+        <p>Number of Quantization Levels: <span id="quantizationLevels"></span></p>
+        <p>Bit Rate at the Output of the Source Encoder: <span id="sourceEncoderBitRate"></span></p>
+        <p>Bit Rate at the Output of the Channel Encoder: <span id="channelEncoderBitRate"></span></p>
+        <p>Bit Rate at the Output of the Interleaver: <span id="interleaverBitRate"></span></p>
+    </div>
+
+    <script>
+        function calculateOutputs() {
+            const BW = parseFloat(document.getElementById('BW').value);
+            const quantizerBits = parseFloat(document.getElementById('quantizerBits').value);
+            const Rs = parseFloat(document.getElementById('Rs').value);
+            const Rc = parseFloat(document.getElementById('Rc').value);
+            
+            const samplingFrequency = 2 * BW;
+            const quantizationLevels = Math.pow(2, quantizerBits);
+            const sourceEncoderBitRate = (samplingFrequency * quantizerBits) * Rs;
+            const channelEncoderBitRate = sourceEncoderBitRate / Rc;
+            const interleaverBitRate = channelEncoderBitRate;
+
+            document.getElementById('samplingFrequency').textContent = samplingFrequency;
+            document.getElementById('quantizationLevels').textContent = quantizationLevels;
+            document.getElementById('sourceEncoderBitRate').textContent = sourceEncoderBitRate;
+            document.getElementById('channelEncoderBitRate').textContent = channelEncoderBitRate;
+            document.getElementById('interleaverBitRate').textContent = interleaverBitRate;
+        }
+        
+        function goHome() {
+            window.location.href = "home_screen.html"; 
+        }
+    </script>
+</body>
+</html>

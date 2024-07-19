@@ -1,0 +1,107 @@
+body {
+    background-color: #3e778e; 
+    color: #054569; 
+    text-align: center;
+    font-family: 'Roboto', Arial, sans-serif; 
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #9ccddc; 
+    color: #054569;
+    padding: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header .icon {
+    margin-right: 10px;
+    font-size: 30px;
+}
+
+#home_icon{
+    margin: 10px;
+    margin-right: 20px;
+    font-size: 30px;
+}
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ced7e0; 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+}
+
+.textBoxHolder {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.textBoxHolder li {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.textBox {
+    width: calc(100% - 10px);
+    height: 30px;
+    padding: 5px;
+    border: 2px solid #5591a9; 
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #9ccddc; 
+    color: #ffffff;
+}
+
+.buttonHolder {
+    margin-top: 20px;
+    text-align: center;
+}
+
+button {
+    width: 120px;
+    height: 40px;
+    font-size: 18px;
+    background-color: #5591a9; /* Light blue button */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+button#homeButton {
+    background-color: #5591a9; /* Dark red for Home button */
+}
+
+#answers {
+    background-color: #ced7e0; 
+    padding: 20px;
+    font-family: 'Roboto', Arial, sans-serif; /* Updated font-family */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    margin: 20px auto 0;
+    max-width: 600px;
+    text-align: left;
+    color: #054569;
+}
+
+#answers h2 {
+    color: #054569; /* Light blue header for results */
+    margin-bottom: 10px;
+}

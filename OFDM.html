@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFDM System Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <!-- <img src="C:\Users\Administrator\Downloads\ADC.png" alt="Icon Image" id="home_icon" class="icon"> -->
+        <i class="fa-brands fa-codepen icon" class="icon"></i>
+        <h1>OFDM System Calculator</h1>
+    </header>
+
+    <form id="parametersForm">
+        <ul class="textBoxHolder">
+            <li>
+                <label for="BW">Resource Block Bandwidth:</label>
+                <input type="number" id="BW" name="BW" placeholder="Resource Block BandWidth" class="textBox" required>
+            </li>
+            <li>
+                <label for="subSpacing">Subcarrier Spacing:</label>
+                <input type="number" id="subSpacing" name="subSpacing" placeholder="Subcarrier Spacing" class="textBox" required>
+            </li>
+            <li>
+                <label for="sym_block">OFDM Symbols per Resource Block:</label>
+                <input type="number" id="sym_block" name="sym_block" placeholder="OFDM Symbols per Resource Block" class="textBox" required>
+            </li>
+            <li>
+                <label for="duration">Symbol Duration:</label>
+                <input type="number" id="duration" name="duration" placeholder="Symbol Duration" class="textBox" required>
+            </li>
+            <li>
+                <label for="QAM">QAM Modulation:</label>
+                <input type="number" id="QAM" name="QAM" placeholder="QAM Modulation" class="textBox" required>
+            </li>
+            <li>
+                <label for="parallel">Parallel Resource Blocks:</label>
+                <input type="number" id="parallel" name="parallel" placeholder="Parallel Resource Blocks" class="textBox" required>
+            </li>
+        </ul>
+        <div class="buttonHolder">
+            <button type="button" id="button1" onclick="solve()">Calculate</button>
+            <button type="button" id="homeButton" onclick="goHome()">Home</button>
+        </div>
+    </form>
+
+    <div id="answers">
+        <h2>Calculation Results</h2>
+        <p>Bits per Resource Element: <span id="QAM-result"></span></p>
+        <p>Bits per OFDM Symbol: <span id="symbol-result"></span></p>
+        <p>Bits per OFDM Resource Block: <span id="block-result"></span></p>
+        <p>Maximum Transmission using Parallel Resource Elements: <span id="maximum-transmission"></span></p>
+    </div>
+
+    <script>
+        function solve() {
+            const qam = parseFloat(document.getElementById("QAM").value);
+            const blockBW = parseFloat(document.getElementById("BW").value);
+            const carrierBW = parseFloat(document.getElementById("subSpacing").value);
+            const symbolsNum = parseFloat(document.getElementById("sym_block").value);
+            const duration = parseFloat(document.getElementById("duration").value);
+            const blocksNum = parseFloat(document.getElementById("parallel").value);
+
+            const ans1 = Math.log2(qam);
+            document.getElementById("QAM-result").textContent = ans1;
+
+            const ans2 = (blockBW / carrierBW) * ans1;
+            document.getElementById("symbol-result").textContent = ans2.toFixed(2);
+
+            const ans3 = symbolsNum * ans2;
+            document.getElementById("block-result").textContent = ans3.toFixed(2);
+
+            const ans4 = (ans3 * blocksNum) / duration;
+            document.getElementById("maximum-transmission").textContent = ans4.toFixed(2);
+        }
+
+        function goHome() {
+            window.location.href = "home_screen.html";
+        }
+    </script>
+</body>
+</html>

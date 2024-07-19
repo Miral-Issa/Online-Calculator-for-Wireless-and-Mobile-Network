@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throughput Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer" />
+        
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <i class="fa-solid fa-check-double icon"></i>
+        <h1>Throughput Calculator</h1>
+    </header>
+
+    <form id="parametersForm">
+        <ul class="textBoxHolder">
+            <li>
+                <label for="technique">Select Technique:</label>
+                <select id="technique" name="technique" class="textBox">
+                    <option value="unslotted-nonpersistent">Unslotted Nonpersistent CSMA</option>
+                    <option value="slotted-nonpersistent">Slotted Nonpersistent CSMA</option>
+                    <option value="unslotted-persistent">Unslotted Persistent CSMA</option>
+                    <option value="slotted-persistent">Slotted Persistent CSMA</option>
+                </select>
+            </li>
+            <li>
+                <label for="bw">Transmission Bandwidth:</label>
+                <input type="number" id="bw" class="textBox" step="any" required>
+                <select id="bwSuffix" class="suffixBox">
+                    <option value="1">None</option>
+                    <option value="1e-6">μ (micro)</option>
+                    <option value="1e-3">m (milli)</option>
+                    <option value="1e3">k (kilo)</option>
+                    <option value="1e6">M (mega)</option>
+                </select>
+            </li>
+            <li>
+                <label for="tau">Propagation Time:</label>
+                <input type="number" id="tau" class="textBox" step="any" required>
+                <select id="tauSuffix" class="suffixBox">
+                    <option value="1">None</option>
+                    <option value="1e-6">μ (micro)</option>
+                    <option value="1e-3">m (milli)</option>
+                    <option value="1e3">k (kilo)</option>
+                    <option value="1e6">M (mega)</option>
+                </select>
+            </li>
+            <li>
+                <label for="frameSize">Frame Size:</label>
+                <input type="number" id="frameSize" class="textBox" step="any" required>
+                <select id="frameSizeSuffix" class="suffixBox">
+                    <option value="1">None</option>
+                    <option value="1e-6">μ (micro)</option>
+                    <option value="1e-3">m (milli)</option>
+                    <option value="1e3">k (kilo)</option>
+                    <option value="1e6">M (mega)</option>
+                </select>
+            </li>
+            <li>
+                <label for="g">Frame Rate:</label>
+                <input type="number" id="g" class="textBox" step="any" required>
+                <select id="gSuffix" class="suffixBox">
+                    <option value="1">None</option>
+                    <option value="1e-6">μ (micro)</option>
+                    <option value="1e-3">m (milli)</option>
+                    <option value="1e3">k (kilo)</option>
+                    <option value="1e6">M (mega)</option>
+                </select>
+            </li>
+        </ul>
+        <div class="buttonHolder">
+            <button type="submit" id="button1">Calculate</button>
+            <button type="button" id="homeButton" onclick="goHome()">Home</button>
+        </div>
+    </form>
+
+    <div id="answers">
+        <h2>Calculation Results</h2>
+        <p id="resultText"></p>
+    </div>
+
+    <script>
+        document.getElementById('parametersForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const technique = document.getElementById('technique').value;
+            const bw = parseFloat(document.getElementById('bw').value) * parseFloat(document.getElementById('bwSuffix').value);
+            const tau = parseFloat(document.getElementById('tau').value) * parseFloat(document.getElementById('tauSuffix').value);
+            const frameSize = parseFloat(document.getElementById('frameSize').value) * parseFloat(document.getElementById('frameSizeSuffix').value);
+            const g = parseFloat(document.getElementById('g').value) * parseFloat(document.getElementById('gSuffix').value);
+            
+            const Tb=1/bw;
+            const T=frameSize*Tb;
+            const G=g*T;
+            const alpha=tau/T;
+            let throughput;
+            if (technique === 'unslotted-nonpersistent') {
+                throughput = (G * Math.exp(-2 * alpha * T)) / (G * (1 + 2 * alpha) + Math.exp(-2 * alpha * G));
+            } else if (technique === 'slotted-nonpersistent') {
+                throughput = (alpha*G*Math.exp(-2*alpha*T))/(1-Math.exp(-alpha*G)+alpha);
+            } else if (technique === 'unslotted-persistent') {
+                throughput = (G*(1+G+alpha*G*(1+G+(alpha*G/2)))*Math.exp(-G*(1+2*alpha)))/(G*(1+2*alpha)-(1-Math.exp(-alpha*G))+(1+alpha*G)*Math.exp(-G*(1+alpha)));
+            } else if (technique === 'slotted-persistent') {
+                throughput = (G*(1+alpha+Math.exp(-alpha*G))*Math.exp(-G*(1+alpha)))/((1+alpha)*(1-Math.exp(-alpha*G))+alpha*Math.exp(-G*(1+alpha)));
+            }
+            throughput = throughput * 100;
+            document.getElementById('resultText').innerText = `Throughput for ${technique}: ${throughput.toFixed(4)}%`;
+        });
+
+        function goHome() {
+            window.location.href = "home_screen.html"; 
+        }
+    </script>
+</body>
+</html>
